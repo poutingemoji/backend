@@ -1,4 +1,19 @@
 const router = require("express").Router();
-const auth = require("./auth")
-router.get("/", (req, res) => res.send(200))
+const { getBotGuilds } = require("../utils/api")
+const User = require("../database/schemas/User")
+const {getMutualGuilds} = require("../utils/utils")
+
+router.get("/guilds", async (req, res) => {
+  const guilds = await getBotGuilds()
+  const user = await User.findOne({id: req.user.id})
+  if (user) {
+    const userGuilds = user.get("guilds")
+    const mutualGuilds = getMutualGuilds(userGuilds, guilds)
+    console.log(user.guilds)
+    res.send(mutualGuilds);
+  } else {
+    return res.status(401).send({msg: "Unauthorized"})
+  }
+});
+
 module.exports = router;

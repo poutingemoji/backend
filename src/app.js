@@ -8,6 +8,7 @@ const routes = require("./routes");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const cors = require("cors")
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -19,6 +20,11 @@ mongoose.connection.on("error", console.error);
 mongoose.connection.on("disconnected", () =>
   console.log("Disconnected from DB!")
 );
+
+app.use(cors({
+  origin: ["http://localhost:3000"],
+  credentials: true,
+}))
 
 app.use(
   session({
