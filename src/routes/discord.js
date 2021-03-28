@@ -6,7 +6,7 @@ const Guild = require("../database/models/Guild");
 
 router.get("/guilds", async (req, res) => {
   const guilds = await getBotGuilds();
-  const user = await User.findOne({ id: req.user.id });
+  const user = await User.findOne({ discordId: req.user.discordId });
   if (user) {
     const userGuilds = user.get("guilds");
     const mutualGuilds = getMutualGuilds(userGuilds, guilds);

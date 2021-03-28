@@ -3,11 +3,11 @@ const DiscordStrategy = require("passport-discord");
 const User = require("../database/models/User");
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user.discordId);
 });
-passport.deserializeUser(async (id, done) => {
+passport.deserializeUser(async (discordId, done) => {
   try {
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ discordId });
     return user ? done(null, user) : done(null, null);
   } catch (err) {
     console.log(err);
@@ -24,10 +24,10 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       const { id, username, discriminator, avatar, guilds } = profile;
-      console.log(id, username, discriminator, avatar, guilds);
+      console.log(discordId, username, discriminator, avatar, guilds);
       try {
         const findUser = await User.findOneAndUpdate(
-          { id: id },
+          { discordId: id },
           { discordTag: `${username}#${discriminator}`, avatar, guilds }
         );
         if (findUser) {
@@ -35,12 +35,13 @@ passport.use(
           return done(null, findUser);
         } else {
           const newUser = await User.create({
-            id,
+            discordId: id,
             username,
             discordTag: `${username}#${discriminator}`,
             avatar,
             guilds,
           });
+          return done(null, newUser)
         }
       } catch (err) {
         console.log(err);

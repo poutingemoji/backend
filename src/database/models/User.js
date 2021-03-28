@@ -1,9 +1,9 @@
-const mongoose = require("mongoose")
+const { Schema, model } = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
-  id: {
+const UserSchema = new Schema({
+  discordId: {
     type: String,
-    required: true, 
+    required: true,
     unique: true,
   },
   username: {
@@ -17,10 +17,10 @@ const UserSchema = new mongoose.Schema({
   guilds: {
     type: Array,
     required: true,
-  }
+  },
   /*
   
   */
-})
+});
 
-module.exports = mongoose.model("User", UserSchema)
+module.exports = model("User", UserSchema);

@@ -1,25 +1,17 @@
-const { Schema } = require("mongoose");
-const { model } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
-const GuildSchema = new Schema({
-  guild: {
+const OAuth2CredentialsSchema = new Schema({
+  accesstoken: {
     type: String,
-    unique: true,
     required: true,
   },
-  commands: {
-    type: Map,
-    of: Number,
+  refreshToken: {
+    type: String,
+    required: true,
   },
-  blacklist: {
-    type: Array,
-    of: String,
+  discordId: {
+    type: String,
+    required: true,
   },
-  settings: {
-    prefix: String,
-    default: {},
-  },
-  defaultRole: String,
-  memberLogChannel: String,
 });
-module.exports = model("Setting", GuildSchema);
+module.exports = model("Setting", OAuth2CredentialsSchema);

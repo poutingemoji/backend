@@ -1,5 +1,4 @@
-const { Schema } = require("mongoose");
-const { model } = require("mongoose");
+const { Schema, model } = require("mongoose");
 
 const GuildSchema = new Schema({
   guild: {
