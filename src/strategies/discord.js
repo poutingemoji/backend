@@ -1,6 +1,6 @@
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord");
-const User = require("../database/schemas/User");
+const User = require("../database/models/user");
 
 passport.serializeUser((user, done) => {
   done(null, user.id);

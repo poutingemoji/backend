@@ -11,6 +11,7 @@ const MongoStore = require("connect-mongo");
 const cors = require("cors")
 
 mongoose.connect(process.env.MONGODB_URI, {
+  useFindAndModify: false,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -20,6 +21,9 @@ mongoose.connection.on("error", console.error);
 mongoose.connection.on("disconnected", () =>
   console.log("Disconnected from DB!")
 );
+
+app.use(express.json())
+app.use(express.urlencoded({extended:false}));
 
 app.use(cors({
   origin: ["http://localhost:3000"],
