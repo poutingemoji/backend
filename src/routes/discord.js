@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const { getBotGuilds, getGuildRoles } = require("../utils/api");
-const User = require("../database/models/user");
+const User = require("../database/models/User");
 const { getMutualGuilds } = require("../utils/utils");
-const Guild = require("../database/models/guild");
+const Guild = require("../database/models/Guild");
 
 router.get("/guilds", async (req, res) => {
   const guilds = await getBotGuilds();
@@ -43,7 +43,26 @@ router.get("/guilds/:guildId/roles", async (req, res) => {
   const { guildId } = req.params;
   try {
     const roles = await getGuildRoles(guildId);
-    res.send(roles)
+    res.send(roles);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "Internal Server Error" });
+  }
+});
+
+router.put("/guilds/:guildId/roles/default", async (req, res) => {
+  const { defaultRole } = req.body;
+  if (!defaultRole) return res.status(400).send({ msg: "Bad Request" });
+  const { guildId } = req.params;
+  try {
+    const update = await Guild.findOneAndUpdate(
+      { guild: guildId },
+      { defaultRole },
+      { new: true }
+    );
+    return update
+      ? res.send(update)
+      : res.status(400).send({ msg: "Bad Request" });
   } catch (err) {
     console.log(err);
     res.status(500).send({ msg: "Internal Server Error" });
