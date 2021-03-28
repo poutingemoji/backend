@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { getBotGuilds } = require("../utils/api");
 const User = require("../database/models/user");
 const { getMutualGuilds } = require("../utils/utils");
-const Guild = require("../database/schemas/guild");
+const Guild = require("../database/models/guild");
+
 router.get("/guilds", async (req, res) => {
   const guilds = await getBotGuilds();
   const user = await User.findOne({ id: req.user.id });
@@ -29,4 +30,11 @@ router.put("/guilds/:guildId/prefix", async (req, res) => {
     ? res.send(update)
     : res.status(400).send({ msg: "Could not find document" });
 });
+
+router.get("/guilds/:guildId/config", async (req, res) => {
+  const { guildId } = req.params;
+  const config = await Guild.findOne({ guildId });
+  return config ? res.send(config) : res.status(404).send({ msg: "Not found" });
+});
+
 module.exports = router;
