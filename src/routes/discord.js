@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getBotGuilds } = require("../utils/api");
+const { getBotGuilds, getGuildRoles } = require("../utils/api");
 const User = require("../database/models/user");
 const { getMutualGuilds } = require("../utils/utils");
 const Guild = require("../database/models/guild");
@@ -26,7 +26,7 @@ router.put("/guilds/:guildId/prefix", async (req, res) => {
     { settings: { prefix } },
     { new: true }
   );
-  console.log(update)
+  console.log(update);
   return update
     ? res.send(update)
     : res.status(400).send({ msg: "Could not find document" });
@@ -35,8 +35,18 @@ router.put("/guilds/:guildId/prefix", async (req, res) => {
 router.get("/guilds/:guildId/config", async (req, res) => {
   const { guildId } = req.params;
   const config = await Guild.findOne({ guild: guildId });
-  console.log(guildId)
+  console.log(guildId);
   return config ? res.send(config) : res.status(404).send({ msg: "Not found" });
 });
 
+router.get("/guilds/:guildId/roles", async (req, res) => {
+  const { guildId } = req.params;
+  try {
+    const roles = await getGuildRoles(guildId);
+    res.send(roles)
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "Internal Server Error" });
+  }
+});
 module.exports = router;

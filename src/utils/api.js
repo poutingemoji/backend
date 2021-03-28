@@ -1,13 +1,24 @@
- const fetch = require("node-fetch")
-
+const fetch = require("node-fetch");
+const TOKEN = process.env.DASHBOARD_BOT_TOKEN;
+const DISCORD_API = "http://discord.com/api/v6"
 async function getBotGuilds() {
-   const response = await fetch("http://discord.com/api/v6/users/@me/guilds", {
-     method: "GET",
-     headers: {
-       Authorization: `Bot ${process.env.DASHBOARD_BOT_TOKEN}`
-     }
-   })
-   return response.json()
- }
+  const response = await fetch(`${DISCORD_API}/users/@me/guilds`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bot ${TOKEN}`,
+    },
+  });
+  return response.json();
+}
 
- module.exports = {getBotGuilds}
+async function getGuildRoles(guildId) {
+  const response = await fetch(`${DISCORD_API}/guilds/${guildId}/roles`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bot ${TOKEN}`,
+    },
+  });
+  return response.json();
+}
+
+module.exports = { getBotGuilds, getGuildRoles };
