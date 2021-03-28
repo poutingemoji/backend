@@ -17,6 +17,7 @@ const GuildSchema = new Schema({
   },
   settings: {
     prefix: String,
+    default: {},
   },
 });
 module.exports = model("Setting", GuildSchema);
