@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const GuildSchema = new Schema({
+const GuildConfigSchema = new Schema({
   guild: {
     type: String,
     unique: true,
@@ -21,4 +21,4 @@ const GuildSchema = new Schema({
   defaultRole: String,
   memberLogChannel: String,
 });
-module.exports = model("Setting", GuildSchema);
+module.exports = model("Setting", GuildConfigSchema);

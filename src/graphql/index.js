@@ -1,4 +1,4 @@
-const { GraphQLSchema } = require("graphql");
+const { GraphQLSchema, graphql } = require("graphql");
 const {
   GraphQLList,
   GraphQLString,
@@ -6,7 +6,9 @@ const {
   GraphQLBoolean,
   GraphQLInt,
 } = require("graphql");
-const { getUserGuilds } = require("../utils/api");
+const { getUserGuilds, getBotGuilds } = require("../utils/api");
+const { getMutualGuilds } = require("../utils/utils");
+const GuildConfig = require("../database/models/GuildConfig");
 
 const GuildType = new GraphQLObjectType({
   name: "GuildType",
@@ -30,9 +32,34 @@ const UserType = new GraphQLObjectType({
     guilds: {
       type: new GraphQLList(GuildType),
       resolve(parent, args, request) {
-        return request.user ? getUserGuilds(request.user.discordId) : null
+        return request.user ? getUserGuilds(request.user.discordId) : null;
       },
     },
+  }),
+});
+
+const MutualGuildType = new GraphQLObjectType({
+  name: "MutualGuildType",
+  fields: () => ({
+    excluded: { type: new GraphQLList(GuildType) },
+    included: { type: new GraphQLList(GuildType) },
+  }),
+});
+
+const SettingsType = new GraphQLObjectType({
+  name: "SettingsType",
+  fields: () => ({
+    prefix: { type: GraphQLString },
+  }),
+});
+
+const GuildConfigType = new GraphQLObjectType({
+  name: "GuildConfigType",
+  fields: () => ({
+    guild: { type: GraphQLString },
+    settings: { type: SettingsType },
+    defaultRole: { type: GraphQLString },
+    memberLogChannel: { type: GraphQLString },
   }),
 });
 
@@ -42,7 +69,30 @@ const RootQuery = new GraphQLObjectType({
     getUser: {
       type: UserType,
       resolve(parent, args, request) {
-        return request.user ? request.user : null
+        return request.user ? request.user : null;
+      },
+    },
+    getMutualGuilds: {
+      type: MutualGuildType,
+      async resolve(parent, args, request) {
+        if (request.user) {
+          const botGuilds = await getBotGuilds();
+          const userGuilds = await getUserGuilds(request.user.discordId);
+          return getMutualGuilds(userGuilds, botGuilds);
+        }
+        return null;
+      },
+    },
+    getGuildConfig: {
+      type: GuildConfigType,
+      args: {
+        guildId: { type: GraphQLString },
+      },
+      async resolve(parent, args, request) {
+        const { guildId } = args;
+        if (!guildId || !request.user) return null;
+        const config = await GuildConfig.findOne({ guild: guildId });
+        return config ? config : null;
       },
     },
   },

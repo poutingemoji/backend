@@ -1,14 +1,17 @@
 const router = require("express").Router();
-const { getBotGuilds, getGuildRoles, getUserGuilds } = require("../utils/api");
+const {
+  getBotGuilds,
+  getGuildConfigRoles,
+  getUserGuilds,
+} = require("../utils/api");
 const User = require("../database/models/User");
 const { getMutualGuilds } = require("../utils/utils");
-const Guild = require("../database/models/Guild");
+const GuildConfig = require("../database/models/GuildConfig");
 
 router.get("/guilds", async (req, res) => {
   const guilds = await getBotGuilds();
-  const user = await User.findOne({ discordId: req.user.discordId });
 
-  if (user) {
+  if (req.user) {
     const userGuilds = await getUserGuilds(req.user.discordId);
     const mutualGuilds = getMutualGuilds(userGuilds, guilds);
     console.log(mutualGuilds);
@@ -22,7 +25,7 @@ router.put("/guilds/:guildId/prefix", async (req, res) => {
   const { prefix } = req.body;
   const { guildId } = req.params;
   if (!prefix) return res.status(400).send({ msg: "Prefix Required" });
-  const update = await Guild.findOneAndUpdate(
+  const update = await GuildConfig.findOneAndUpdate(
     { guild: guildId },
     { settings: { prefix } },
     { new: true }
@@ -35,15 +38,14 @@ router.put("/guilds/:guildId/prefix", async (req, res) => {
 
 router.get("/guilds/:guildId/config", async (req, res) => {
   const { guildId } = req.params;
-  const config = await Guild.findOne({ guild: guildId });
-  console.log(guildId);
+  const config = await GuildConfig.findOne({ guild: guildId });
   return config ? res.send(config) : res.status(404).send({ msg: "Not found" });
 });
 
 router.get("/guilds/:guildId/roles", async (req, res) => {
   const { guildId } = req.params;
   try {
-    const roles = await getGuildRoles(guildId);
+    const roles = await getGuildConfigRoles(guildId);
     res.send(roles);
   } catch (err) {
     console.log(err);
@@ -56,7 +58,7 @@ router.put("/guilds/:guildId/roles/default", async (req, res) => {
   if (!defaultRole) return res.status(400).send({ msg: "Bad Request" });
   const { guildId } = req.params;
   try {
-    const update = await Guild.findOneAndUpdate(
+    const update = await GuildConfig.findOneAndUpdate(
       { guild: guildId },
       { defaultRole },
       { new: true }
