@@ -1,3 +1,5 @@
+const CryptoJS = require("crypto-js")
+
 function getMutualGuilds(userGuilds, botGuilds) {
   /* return userGuilds.filter(
     (guild) =>
@@ -16,4 +18,11 @@ function getMutualGuilds(userGuilds, botGuilds) {
   return { excluded, included };
 }
 
-module.exports = { getMutualGuilds };
+function encrypt(token) {
+  return CryptoJS.AES.encrypt(token, process.env.SECRET_PASSPHRASE)
+}
+
+function decrypt(token) {
+  return CryptoJS.AES.decrypt(token, process.env.SECRET_PASSPHRASE);
+}
+module.exports = { getMutualGuilds, encrypt, decrypt };

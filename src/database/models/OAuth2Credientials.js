@@ -14,4 +14,4 @@ const OAuth2CredentialsSchema = new Schema({
     required: true,
   },
 });
-module.exports = model("Setting", OAuth2CredentialsSchema);
+module.exports = model("OAuth2Credentials", OAuth2CredentialsSchema);

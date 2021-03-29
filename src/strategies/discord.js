@@ -1,6 +1,8 @@
 const passport = require("passport");
 const DiscordStrategy = require("passport-discord");
 const User = require("../database/models/User");
+const OAuth2Credentials = require("../database/models/OAuth2Credientials");
+const { encrypt } = require("../utils/utils");
 
 passport.serializeUser((user, done) => {
   done(null, user.discordId);
@@ -23,14 +25,31 @@ passport.use(
       scope: ["identify", "guilds"],
     },
     async (accessToken, refreshToken, profile, done) => {
+      const encryptedAccessToken = encrypt(accessToken).toString();
+      const encryptedRefreshToken = encrypt(refreshToken).toString();
       const { id, username, discriminator, avatar, guilds } = profile;
-      console.log(discordId, username, discriminator, avatar, guilds);
+      console.log(id, username, discriminator, avatar, guilds);
       try {
         const findUser = await User.findOneAndUpdate(
           { discordId: id },
-          { discordTag: `${username}#${discriminator}`, avatar, guilds }
+          { discordTag: `${username}#${discriminator}`, avatar, guilds },
+          { new: true }
+        );
+        const findCredentials = await OAuth2Credentials.findOneAndUpdate(
+          { discordId: id },
+          {
+            accessToken: encryptedAccessToken,
+            refreshToken: encryptedRefreshToken,
+          }
         );
         if (findUser) {
+          if (!findCredentials) {
+            const newCredentials = await OAuth2Credentials.create({
+              accessToken: encryptedAccessToken,
+              refreshToken: encryptedRefreshToken,
+              discordId: id,
+            });
+          }
           console.log("User was found");
           return done(null, findUser);
         } else {
@@ -41,7 +60,12 @@ passport.use(
             avatar,
             guilds,
           });
-          return done(null, newUser)
+          const newCredentials = await OAuth2Credentials.create({
+            accessToken: encryptedAccessToken,
+            refreshToken: encryptedRefreshToken,
+            discordId: id,
+          });
+          return done(null, newUser);
         }
       } catch (err) {
         console.log(err);
