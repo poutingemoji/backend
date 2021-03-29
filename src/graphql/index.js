@@ -153,6 +153,7 @@ const MutationQuery = new GraphQLObjectType({
       async resolve(parent, args, request) {
         const { guildId, defaultRole } = args;
         if (!guildId || !defaultRole || !request.user) return null;
+        console.log("HERE")
         const config = await GuildConfig.findOneAndUpdate(
           { guild: guildId },
           { defaultRole },
