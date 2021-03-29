@@ -33,7 +33,7 @@ app.use(
     origin: [
       BACKEND_PORT
         ? `http:/localhost:${BACKEND_PORT}`
-        : "https://pfp-logger-backend.herokuapp.com/",
+        : "https://pfp-logger-backend.herokuapp.com",
     ],
     credentials: true,
   })
