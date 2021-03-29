@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const OAuth2CredentialsSchema = new Schema({
-  accesstoken: {
+  accessToken: {
     type: String,
     required: true,
   },

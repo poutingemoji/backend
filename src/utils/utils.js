@@ -11,7 +11,7 @@ function getMutualGuilds(userGuilds, botGuilds) {
   );
   const included = [];
   const excluded = validGuilds.filter((guild) => {
-    const findGuild = botGuilds.find((g) => g.discordId === guild.discordId);
+    const findGuild = botGuilds.find((g) => g.id === guild.id);
     if (!findGuild) return guild;
     included.push(findGuild);
   });

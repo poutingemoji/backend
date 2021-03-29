@@ -7,6 +7,7 @@ const { encrypt } = require("../utils/utils");
 passport.serializeUser((user, done) => {
   done(null, user.discordId);
 });
+
 passport.deserializeUser(async (discordId, done) => {
   try {
     const user = await User.findOne({ discordId });
@@ -16,6 +17,7 @@ passport.deserializeUser(async (discordId, done) => {
     done(err, null);
   }
 });
+
 passport.use(
   new DiscordStrategy(
     {
@@ -32,7 +34,7 @@ passport.use(
       try {
         const findUser = await User.findOneAndUpdate(
           { discordId: id },
-          { discordTag: `${username}#${discriminator}`, avatar, guilds },
+          { discordTag: `${username}#${discriminator}`, avatar },
           { new: true }
         );
         const findCredentials = await OAuth2Credentials.findOneAndUpdate(
@@ -58,7 +60,6 @@ passport.use(
             username,
             discordTag: `${username}#${discriminator}`,
             avatar,
-            guilds,
           });
           const newCredentials = await OAuth2Credentials.create({
             accessToken: encryptedAccessToken,

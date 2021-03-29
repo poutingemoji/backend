@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { getBotGuilds, getGuildRoles } = require("../utils/api");
+const { getBotGuilds, getGuildRoles, getUserGuilds } = require("../utils/api");
 const User = require("../database/models/User");
 const { getMutualGuilds } = require("../utils/utils");
 const Guild = require("../database/models/Guild");
@@ -7,10 +7,11 @@ const Guild = require("../database/models/Guild");
 router.get("/guilds", async (req, res) => {
   const guilds = await getBotGuilds();
   const user = await User.findOne({ discordId: req.user.discordId });
+
   if (user) {
-    const userGuilds = user.get("guilds");
+    const userGuilds = await getUserGuilds(req.user.discordId);
     const mutualGuilds = getMutualGuilds(userGuilds, guilds);
-    console.log(user.guilds);
+    console.log(mutualGuilds);
     res.send(mutualGuilds);
   } else {
     return res.status(401).send({ msg: "Unauthorized" });

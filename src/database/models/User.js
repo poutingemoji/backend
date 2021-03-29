@@ -6,6 +6,11 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
+  discordTag: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   username: {
     type: String,
     required: true,
@@ -14,13 +19,6 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  guilds: {
-    type: Array,
-    required: true,
-  },
-  /*
-  
-  */
 });
 
 module.exports = model("User", UserSchema);

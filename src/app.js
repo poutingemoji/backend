@@ -1,14 +1,17 @@
 require("dotenv").config();
 require("./strategies/discord");
 const express = require("express");
-const app = express();
 const passport = require("passport");
-const PORT = process.env.PORT || 3002;
-const routes = require("./routes");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cors = require("cors")
+const {graphqlHTTP} = require("express-graphql")
+const RootSchema = require("./graphql")
+
+const app = express();
+const PORT = process.env.PORT || 3002;
+const routes = require("./routes");
 
 mongoose.connect(process.env.MONGODB_URI, {
   useFindAndModify: false,
@@ -44,6 +47,14 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(
+  "/graphql",
+  graphqlHTTP({
+    graphiql: true,
+    schema: RootSchema,
+  })
+);
 
 app.use("/api", routes);
 
