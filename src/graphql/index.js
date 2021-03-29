@@ -6,7 +6,7 @@ const {
   GraphQLBoolean,
   GraphQLInt,
 } = require("graphql");
-const { getUserGuilds, getBotGuilds } = require("../utils/api");
+const { getUserGuilds, getBotGuilds, getGuildRoles } = require("../utils/api");
 const { getMutualGuilds } = require("../utils/utils");
 const GuildConfig = require("../database/models/GuildConfig");
 
@@ -63,6 +63,21 @@ const GuildConfigType = new GraphQLObjectType({
   }),
 });
 
+const GuildRoleType = new GraphQLObjectType({
+  name: "GuildRoleType",
+  fields: () => ({
+    id: { type: GraphQLString },
+    name: { type: GraphQLString },
+    color: { type: GraphQLInt },
+    hoist: { type: GraphQLBoolean },
+    position: { type: GraphQLInt },
+    permissions: { type: GraphQLInt },
+    permissions_new: { type: GraphQLString },
+    managed: { type: GraphQLBoolean },
+    mentionable: { type: GraphQLBoolean },
+  }),
+});
+
 const RootQuery = new GraphQLObjectType({
   name: "RootQuery",
   fields: {
@@ -95,7 +110,61 @@ const RootQuery = new GraphQLObjectType({
         return config ? config : null;
       },
     },
+    getGuildRoles: {
+      type: new GraphQLList(GuildRoleType),
+      args: {
+        guildId: { type: GraphQLString },
+      },
+      async resolve(parent, args, request) {
+        const { guildId } = args;
+        if (!guildId || !request.user) return null;
+        return getGuildRoles(guildId);
+      },
+    },
   },
 });
 
-module.exports = new GraphQLSchema({ query: RootQuery });
+const MutationQuery = new GraphQLObjectType({
+  name: "RootMutationQuery",
+  fields: {
+    updateGuildPrefix: {
+      type: GuildConfigType,
+      args: {
+        guildId: { type: GraphQLString },
+        prefix: { type: GraphQLString },
+      },
+      async resolve(parent, args, request) {
+        const { guildId, prefix } = args;
+        if (!guildId || !prefix || !request.user) return null;
+        const config = await GuildConfig.findOneAndUpdate(
+          { guild: guildId },
+          { settings: { prefix } },
+          { new: true }
+        );
+        return config ? config : null;
+      },
+    },
+    updateDefaultRole: {
+      type: GuildConfigType,
+      args: {
+        guildId: { type: GraphQLString },
+        defaultRole: { type: GraphQLString },
+      },
+      async resolve(parent, args, request) {
+        const { guildId, defaultRole } = args;
+        if (!guildId || !defaultRole || !request.user) return null;
+        const config = await GuildConfig.findOneAndUpdate(
+          { guild: guildId },
+          { defaultRole },
+          { new: true }
+        );
+        return config ? config : null;
+      },
+    },
+  },
+});
+
+module.exports = new GraphQLSchema({
+  query: RootQuery,
+  mutation: MutationQuery,
+});

@@ -1,9 +1,5 @@
 const router = require("express").Router();
-const {
-  getBotGuilds,
-  getGuildConfigRoles,
-  getUserGuilds,
-} = require("../utils/api");
+const { getBotGuilds, getGuildRoles, getUserGuilds } = require("../utils/api");
 const User = require("../database/models/User");
 const { getMutualGuilds } = require("../utils/utils");
 const GuildConfig = require("../database/models/GuildConfig");
@@ -45,7 +41,7 @@ router.get("/guilds/:guildId/config", async (req, res) => {
 router.get("/guilds/:guildId/roles", async (req, res) => {
   const { guildId } = req.params;
   try {
-    const roles = await getGuildConfigRoles(guildId);
+    const roles = await getGuildRoles(guildId);
     res.send(roles);
   } catch (err) {
     console.log(err);

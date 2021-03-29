@@ -15,7 +15,7 @@ async function getBotGuilds() {
   return response.json();
 }
 
-async function getGuildConfigRoles(guildId) {
+async function getGuildRoles(guildId) {
   const response = await fetch(`${DISCORD_API}/guilds/${guildId}/roles`, {
     method: "GET",
     headers: {
@@ -40,4 +40,4 @@ async function getUserGuilds(discordId) {
   return response.json();
 }
 
-module.exports = { getBotGuilds, getGuildConfigRoles, getUserGuilds };
+module.exports = { getBotGuilds, getGuildRoles, getUserGuilds };
