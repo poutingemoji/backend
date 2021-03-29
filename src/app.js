@@ -10,7 +10,7 @@ const {graphqlHTTP} = require("express-graphql")
 const RootSchema = require("./graphql")
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const BACKEND_PORT = process.env.BACKEND_PORT;
 const routes = require("./routes");
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -31,8 +31,8 @@ app.use(express.urlencoded({extended:false}));
 app.use(
   cors({
     origin: [
-      process.env.PORT
-        ? `http:/localhost:${process.env.PORT}`
+      BACKEND_PORT
+        ? `http:/localhost:${BACKEND_PORT}`
         : "https://poutingemoji.github.io/pfp-logger-client",
     ],
     credentials: true,
@@ -64,4 +64,4 @@ app.use(
 
 app.use("/api", routes);
 
-app.listen(PORT, () => console.log(`Running on Port ${PORT}!`));
+app.listen(BACKEND_PORT, () => console.log(`Running on Port ${BACKEND_PORT}!`));
