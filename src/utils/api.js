@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const OAuth2Credentials = require("../database/models/OAuth2Credientials");
-const TOKEN = process.env.DASHBOARD_BOT_TOKEN;
+const TOKEN = process.env.BOT_TOKEN;
 const { decrypt } = require("../utils/utils");
 const DISCORD_API = "http://discord.com/api/v6";
 const CryptoJS = require("crypto-js");

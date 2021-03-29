@@ -28,10 +28,16 @@ mongoose.connection.on("disconnected", () =>
 app.use(express.json())
 app.use(express.urlencoded({extended:false}));
 
-app.use(cors({
-  origin: ["http://localhost:3000"],
-  credentials: true,
-}))
+app.use(
+  cors({
+    origin: [
+      process.env.PORT
+        ? `http:/localhost:${process.env.PORT}`
+        : "https://poutingemoji.github.io/pfp-logger-client",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(
   session({
