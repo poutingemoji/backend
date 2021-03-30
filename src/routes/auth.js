@@ -11,7 +11,7 @@ router.get(
       `${
         CLIENT_PORT
           ? `http://localhost:${CLIENT_PORT}`
-          : "https://poutingemoji.github.io/pfp-logger-client"
+          : "https://poutingemoji.github.io/pfp-logger-client/#"
       }/menu`
     );
   }
