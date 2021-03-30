@@ -32,6 +32,7 @@ const UserType = new GraphQLObjectType({
     guilds: {
       type: new GraphQLList(GuildType),
       resolve(parent, args, request) {
+        console.log(request);
         return request.user ? getUserGuilds(request.user.discordId) : null;
       },
     },
@@ -84,13 +85,14 @@ const RootQuery = new GraphQLObjectType({
     getUser: {
       type: UserType,
       resolve(parent, args, request) {
-        console.log(request.user)
+        console.log(request)
         return request.user ? request.user : null;
       },
     },
     getMutualGuilds: {
       type: MutualGuildType,
       async resolve(parent, args, request) {
+        console.log(request);
         if (request.user) {
           const botGuilds = await getBotGuilds();
           const userGuilds = await getUserGuilds(request.user.discordId);
@@ -105,6 +107,7 @@ const RootQuery = new GraphQLObjectType({
         guildId: { type: GraphQLString },
       },
       async resolve(parent, args, request) {
+        console.log(request);
         const { guildId } = args;
         if (!guildId || !request.user) return null;
         const config = await GuildConfig.findOne({ guild: guildId });
@@ -117,6 +120,7 @@ const RootQuery = new GraphQLObjectType({
         guildId: { type: GraphQLString },
       },
       async resolve(parent, args, request) {
+        console.log(request);
         const { guildId } = args;
         if (!guildId || !request.user) return null;
         return getGuildRoles(guildId);
