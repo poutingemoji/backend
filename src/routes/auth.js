@@ -12,7 +12,7 @@ router.get(
     res.redirect(
       CLIENT_PORT
         ? `http://localhost:${CLIENT_PORT}/menu`
-        : "https://poutingemoji.github.io/pfp-logger-client/#/menu"
+        : "https://agitated-stonebraker-e7d7da.netlify.app/#/menu"
     )
 );
 

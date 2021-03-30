@@ -34,7 +34,7 @@ app.use(
     origin: [
       CLIENT_PORT
         ? `http://localhost:3000`
-        : "https://poutingemoji.github.io",
+        : "https://agitated-stonebraker-e7d7da.netlify.app",
     ],
     credentials: true,
   })
