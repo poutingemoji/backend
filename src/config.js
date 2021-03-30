@@ -4,5 +4,5 @@ module.exports = {
     : "https://pfp-logger-backend.herokuapp.com",
   CLIENT_ROOT_URL: true
     ? `http://localhost:3000`
-    : "https://agitated-stonebraker-e7d7da.netlify.app",
+    : "https://poutingemoji.github.io/pfp-logger-client",
 };

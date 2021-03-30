@@ -34,6 +34,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://agitated-stonebraker-e7d7da.netlify.app",
+      "https://poutingemoji.github.io/pfp-logger-client",
     ],
     credentials: true,
   })
@@ -44,7 +45,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     cookie: {
       maxAge: 60000 * 60 * 24,
-      domain: ".agitated-stonebraker-e7d7da.netlify.app",
+      domain: ".poutingemoji.github.io",
     },
     resave: false,
     saveUninitialized: false,
