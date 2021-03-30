@@ -11,7 +11,7 @@ const RootSchema = require("./graphql");
 
 const app = express();
 const CLIENT_PORT = process.env.CLIENT_PORT;
-const BACKEND_PORT = process.env.BACKEND_PORT;
+const BACKEND_PORT = process.env.PORT || process.env.BACKEND_PORT;
 const routes = require("./routes");
 
 mongoose.connect(process.env.MONGODB_URI, {
