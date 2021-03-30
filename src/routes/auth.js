@@ -8,7 +8,12 @@ router.get(
   passport.authenticate("discord", {
     failureRedirect: "/",
   }),
-  (req, res) => res.redirect("/menu")
+  (req, res) =>
+    res.redirect(
+      CLIENT_PORT
+        ? `http://localhost:${CLIENT_PORT}/menu`
+        : "https://poutingemoji.github.io/pfp-logger-client/#/menu"
+    )
 );
 
 router.get("/", (req, res) => {
