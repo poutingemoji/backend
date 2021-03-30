@@ -32,9 +32,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: [
-      CLIENT_PORT
-        ? `http://localhost:3000`
-        : "https://agitated-stonebraker-e7d7da.netlify.app",
+      "http://localhost:3000",
+      "https://agitated-stonebraker-e7d7da.netlify.app",
     ],
     credentials: true,
   })
