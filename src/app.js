@@ -10,9 +10,7 @@ const { graphqlHTTP } = require("express-graphql");
 const RootSchema = require("./graphql");
 
 const app = express();
-const BACKEND_PORT = process.env.PORT || 3001;
 const routes = require("./routes");
-const { CLIENT_ROOT_URL } = require("./config");
 
 mongoose.connect(process.env.MONGODB_URI, {
   useFindAndModify: false,
@@ -45,7 +43,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     cookie: {
       maxAge: 60000 * 60 * 24,
-      domain: ".poutingemoji.github.io",
     },
     resave: false,
     saveUninitialized: false,
@@ -66,4 +63,5 @@ app.use(
 
 app.use("/api", routes);
 
+const BACKEND_PORT = process.env.PORT || 3001;
 app.listen(BACKEND_PORT, () => console.log(`Running on Port ${BACKEND_PORT}!`));
