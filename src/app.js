@@ -10,8 +10,7 @@ const { graphqlHTTP } = require("express-graphql");
 const RootSchema = require("./graphql");
 
 const app = express();
-const CLIENT_PORT = process.env.CLIENT_PORT;
-const BACKEND_PORT = process.env.PORT || process.env.BACKEND_PORT;
+const BACKEND_PORT = process.env.PORT || 3001;
 const routes = require("./routes");
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -43,6 +42,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     cookie: {
+      httpOnly: false,
       maxAge: 60000 * 60 * 24,
     },
     resave: false,
