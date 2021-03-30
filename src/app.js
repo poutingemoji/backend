@@ -34,7 +34,7 @@ app.use(
     origin: [
       CLIENT_PORT
         ? `http://localhost:3000`
-        : "https://poutingemoji.github.io/pfp-logger-client/#",
+        : "https://poutingemoji.github.io",
     ],
     credentials: true,
   })
