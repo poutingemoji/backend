@@ -11,6 +11,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (discordId, done) => {
   try {
     const user = await User.findOne({ discordId });
+    console.log("USER PASSPORT DESERIALIZE", discordId, user)
     return user ? done(null, user) : done(null, null);
   } catch (err) {
     console.log(err);

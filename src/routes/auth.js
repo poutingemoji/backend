@@ -1,20 +1,16 @@
 const router = require("express").Router();
 const passport = require("passport");
 const CLIENT_PORT = process.env.CLIENT_PORT;
+const { CLIENT_ROOT_URL } = require("../config");
 router.get("/discord", passport.authenticate("discord"));
 console.log(CLIENT_PORT);
 router.get(
   "/discord/redirect",
   passport.authenticate("discord", {
-    failureRedirect: "/",
+    failureRedirect: CLIENT_ROOT_URL,
   }),
   (req, res) => {
-    console.log(req.user);
-    return res.redirect(
-      CLIENT_PORT
-        ? `http://localhost:${CLIENT_PORT}/menu`
-        : "https://agitated-stonebraker-e7d7da.netlify.app/#/menu"
-    );
+    return res.redirect(`${CLIENT_ROOT_URL}/menu`);
   }
 );
 
@@ -24,6 +20,11 @@ router.get("/", (req, res) => {
   } else {
     res.status(401).send({ msg: "Unauthorized" });
   }
+});
+
+router.get("/logout", function (req, res) {
+  req.logout();
+  return res.redirect(`${CLIENT_ROOT_URL}/menu`);
 });
 
 module.exports = router;
