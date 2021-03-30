@@ -10,7 +10,6 @@ router.get("/guilds", async (req, res) => {
   if (req.user) {
     const userGuilds = await getUserGuilds(req.user.discordId);
     const mutualGuilds = getMutualGuilds(userGuilds, guilds);
-    console.log(mutualGuilds);
     res.send(mutualGuilds);
   } else {
     return res.status(401).send({ msg: "Unauthorized" });
@@ -67,4 +66,5 @@ router.put("/guilds/:guildId/roles/default", async (req, res) => {
     res.status(500).send({ msg: "Internal Server Error" });
   }
 });
+
 module.exports = router;

@@ -84,6 +84,7 @@ const RootQuery = new GraphQLObjectType({
     getUser: {
       type: UserType,
       resolve(parent, args, request) {
+        console.log(request.user)
         return request.user ? request.user : null;
       },
     },

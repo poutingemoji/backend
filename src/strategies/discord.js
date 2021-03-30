@@ -30,7 +30,6 @@ passport.use(
       const encryptedAccessToken = encrypt(accessToken).toString();
       const encryptedRefreshToken = encrypt(refreshToken).toString();
       const { id, username, discriminator, avatar, guilds } = profile;
-      console.log(id, username, discriminator, avatar, guilds);
       try {
         const findUser = await User.findOneAndUpdate(
           { discordId: id },

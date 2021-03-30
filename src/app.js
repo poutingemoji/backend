@@ -5,12 +5,13 @@ const passport = require("passport");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-const cors = require("cors")
-const {graphqlHTTP} = require("express-graphql")
-const RootSchema = require("./graphql")
+const cors = require("cors");
+const { graphqlHTTP } = require("express-graphql");
+const RootSchema = require("./graphql");
 
 const app = express();
-const BACKEND_PORT = process.env.PORT || process.env.BACKEND_PORT;
+const CLIENT_PORT = process.env.CLIENT_PORT;
+const BACKEND_PORT = process.env.BACKEND_PORT;
 const routes = require("./routes");
 
 mongoose.connect(process.env.MONGODB_URI, {
@@ -25,15 +26,15 @@ mongoose.connection.on("disconnected", () =>
   console.log("Disconnected from DB!")
 );
 
-app.use(express.json())
-app.use(express.urlencoded({extended:false}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(
   cors({
     origin: [
-      BACKEND_PORT
-        ? `http:/localhost:${BACKEND_PORT}`
-        : "clowning",
+      CLIENT_PORT
+        ? `http://localhost:3000`
+        : "https://poutingemoji.github.io/pfp-logger-client",
     ],
     credentials: true,
   })
