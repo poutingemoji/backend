@@ -8,12 +8,14 @@ router.get(
   passport.authenticate("discord", {
     failureRedirect: "/",
   }),
-  (req, res) =>
-    res.redirect(
+  (req, res) => {
+    console.log(req.user);
+    return res.redirect(
       CLIENT_PORT
         ? `http://localhost:${CLIENT_PORT}/menu`
         : "https://agitated-stonebraker-e7d7da.netlify.app/#/menu"
-    )
+    );
+  }
 );
 
 router.get("/", (req, res) => {
