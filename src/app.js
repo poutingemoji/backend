@@ -12,6 +12,7 @@ const RootSchema = require("./graphql");
 const app = express();
 const BACKEND_PORT = process.env.PORT || 3001;
 const routes = require("./routes");
+const { CLIENT_ROOT_URL } = require("./config");
 
 mongoose.connect(process.env.MONGODB_URI, {
   useFindAndModify: false,
@@ -42,8 +43,8 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     cookie: {
-      httpOnly: false,
       maxAge: 60000 * 60 * 24,
+      domain: ".agitated-stonebraker-e7d7da.netlify.app",
     },
     resave: false,
     saveUninitialized: false,
