@@ -5,14 +5,10 @@ router.get("/discord", passport.authenticate("discord"));
 console.log(CLIENT_PORT);
 router.get(
   "/discord/redirect",
-  passport.authenticate("discord"),
-  (req, res) => {
-    res.redirect(
-      CLIENT_PORT
-        ? `http://localhost:${CLIENT_PORT}`
-        : "https://poutingemoji.github.io/pfp-logger-client"
-    );
-  }
+  passport.authenticate("discord", {
+    failureRedirect: "/",
+  }),
+  (req, res) => res.redirect("/menu")
 );
 
 router.get("/", (req, res) => {
