@@ -43,7 +43,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     cookie: {
       maxAge: 60000 * 60 * 24,
-      domain: ".pfp-logger.xyz",
+      domain: "pfp-logger.xyz",
     },
     resave: false,
     saveUninitialized: false,
