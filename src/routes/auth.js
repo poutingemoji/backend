@@ -10,7 +10,7 @@ router.get(
     failureRedirect: CLIENT_ROOT_URL,
   }),
   (req, res) => {
-    return res.redirect(`${CLIENT_ROOT_URL}/dashboard`);
+    return res.redirect(`${CLIENT_ROOT_URL}/#/dashboard`);
   }
 );
 
